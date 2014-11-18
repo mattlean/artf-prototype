@@ -2211,6 +2211,7 @@ GameObject:
   - 136: {fileID: 524391243}
   - 82: {fileID: 524391242}
   - 114: {fileID: 524391241}
+  - 114: {fileID: 524391245}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2351,6 +2352,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 84
   m_CollisionDetection: 0
+--- !u!114 &524391245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 524391238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 544f2064df03e95419b4a5147c506b08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingHealth: 100
+  currentHealth: 0
+  healthSlider: {fileID: 133554317}
+  damageImage: {fileID: 1177456653}
+  deathClip: {fileID: 8300000, guid: d36a393bca4582043982db9089e1694f, type: 3}
+  flashSpeed: 5
+  flashColour: {r: 1, g: 0, b: 0, a: .196078435}
 --- !u!1001 &567474510
 Prefab:
   m_ObjectHideFlags: 0
@@ -4518,6 +4537,7 @@ GameObject:
   - 82: {fileID: 1689815567}
   - 195: {fileID: 1689815566}
   - 114: {fileID: 1689815572}
+  - 114: {fileID: 1689815573}
   m_Layer: 9
   m_Name: Zombunny
   m_TagString: Untagged
@@ -4684,6 +4704,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94f6618a0da65fa45b24d5105d5d8422, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1689815573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1689815564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e15099f5ee559584089d5851df572def, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeBetweenAttacks: .5
+  attackDamage: 10
 --- !u!1 &1704217617
 GameObject:
   m_ObjectHideFlags: 0
@@ -5300,7 +5333,7 @@ MonoBehaviour:
   m_Script: {fileID: 1301386320, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Priority: -1
+  m_Priority: 3
   ignoreReversedGraphics: 1
   blockingObjects: 0
   m_BlockingMask:
