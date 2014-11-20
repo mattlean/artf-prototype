@@ -123,10 +123,37 @@ public class PlayerMovement : MonoBehaviour
 		//Reset the timer
 		timer = 0f;
 
-		Collider[] hitColliders = Physics.OverlapSphere(center, radius);
+		Vector3 tempVector = transform.position;
+		switch ((int)playerDirection) {
+		case 1:
+			tempVector = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z - 1);
+			break;
+		case 2:
+			tempVector = new Vector3(transform.position.x - 1, transform.position.y + 0.5f, transform.position.z);
+			break;
+		case 3:
+			tempVector = new Vector3(transform.position.x + 1, transform.position.y + 0.5f, transform.position.z);
+			break;
+		case 4:
+			tempVector = new Vector3(transform.position.x - 1, transform.position.y + 0.5f, transform.position.z + 1);
+			break;
+		case 5:
+			tempVector = new Vector3(transform.position.x + 1, transform.position.y + 0.5f, transform.position.z + 1);
+			break;
+		case 6:
+			tempVector = new Vector3(transform.position.x - 1, transform.position.y + 0.5f, transform.position.z - 1);
+			break;
+		case 7:
+			tempVector = new Vector3(transform.position.x + 1, transform.position.y + 0.5f, transform.position.z - 1);
+			break;
+		default:
+			tempVector = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z + 1);
+			break;
+		}
 
+		Collider[] hitColliders = Physics.OverlapSphere(tempVector, radius);
 		hitbox = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-		hitbox.transform.position = center;
+		hitbox.transform.position = tempVector;
 		hitbox.transform.localScale = new Vector3 (radius, radius, radius);
 		hitbox.renderer.material.color = new Color(1f, 0f, 0f, 0.5f);
 		hitbox.renderer.collider.enabled = false;
