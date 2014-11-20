@@ -8,10 +8,12 @@ public class PlayerMovement : MonoBehaviour
 	Animator anim; //Reference to the animator's component
 	Rigidbody playerRigidbody; //Reference to the player's rigidbody
 	int floorMask; //A layer mask so that a ray can be cast just a game objs on the floor layer
-	Vector3 playerDirection = Vector3.forward; //Determines the direction the player is facing
 	GameObject hitbox;
 	float timer; //A timer to determine when to fire
 	float cooldown = 0.3f;
+	enum direction {up, down, left, right, upleft, upright, downleft, downright};
+	direction playerDirection = direction.up;
+	Vector3 directionVector = Vector3.forward;
 
 	void Awake() {
 		//Create a layer mask for the floor layer
@@ -20,8 +22,6 @@ public class PlayerMovement : MonoBehaviour
 		//Setup references
 		anim = GetComponent<Animator> ();
 		playerRigidbody = GetComponent<Rigidbody> ();
-
-		print (hitbox);
 	}
 
 	void FixedUpdate() {
@@ -45,7 +45,7 @@ public class PlayerMovement : MonoBehaviour
 		timer += Time.deltaTime;
 
 		if(Input.GetButton ("Fire1") && timer >= cooldown && Time.timeScale != 0) {
-			Attack(new Vector3(4f, 0.97f, 3.38f), 1f);
+			Attack(new Vector3(6f, 0.97f, 3.38f), 1f);
 		}
 	}
 
@@ -60,29 +60,37 @@ public class PlayerMovement : MonoBehaviour
 		playerRigidbody.MovePosition (transform.position + movement);
 		
 		if (h == -1) {
-			playerDirection = Vector3.left;
+			directionVector = Vector3.left;
+			playerDirection = direction.left;
 		} else if (h == 1) {
-			playerDirection = Vector3.right;
+			playerDirection = direction.right;
+			directionVector = Vector3.right;
 		}
 
 		if (v == -1) {
-			playerDirection = Vector3.back;
+			directionVector = Vector3.back;
+			playerDirection = direction.down;
 		} else if (v == 1) {
-			playerDirection = Vector3.forward;
+			directionVector = Vector3.forward;
+			playerDirection = direction.up;
 		}
 
 		if (h == -1 && v == -1) {
-			playerDirection = new Vector3(-1, 0, -1);
+			directionVector = new Vector3(-1, 0, -1);
+			playerDirection = direction.downleft;
 		} else if (h == 1 && v == -1) {
-			playerDirection = new Vector3(1, 0, -1);
+			directionVector = new Vector3(1, 0, -1);
+			playerDirection = direction.downright;
 		} else if (h == -1 && v == 1) {
-			playerDirection = new Vector3(-1, 0, 1);
+			directionVector = new Vector3(-1, 0, 1);
+			playerDirection = direction.upleft;
 		} else if (h == 1 && v == 1) {
-			playerDirection = new Vector3(1, 0, 1);
+			directionVector = new Vector3(1, 0, 1);
+			playerDirection = direction.upright;
 		}
 
-		Quaternion newDirection = Quaternion.LookRotation(playerDirection, Vector3.up);
-		playerRigidbody.MoveRotation (newDirection);
+		Quaternion newRotation = Quaternion.LookRotation(directionVector, Vector3.up);
+		playerRigidbody.MoveRotation (newRotation);
 	}
 
 	void Animating(float h, float v) {
