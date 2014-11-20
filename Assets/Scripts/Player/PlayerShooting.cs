@@ -58,8 +58,7 @@ public class PlayerShooting : MonoBehaviour
         gunLine.enabled = false;
         gunLight.enabled = false;
     }
-
-
+	
     void Shoot ()
     {
 		//Reset the timer

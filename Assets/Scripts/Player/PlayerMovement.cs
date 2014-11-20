@@ -9,6 +9,9 @@ public class PlayerMovement : MonoBehaviour
 	Rigidbody playerRigidbody; //Reference to the player's rigidbody
 	int floorMask; //A layer mask so that a ray can be cast just a game objs on the floor layer
 	Vector3 playerDirection = Vector3.forward; //Determines the direction the player is facing
+	GameObject hitbox;
+	float timer; //A timer to determine when to fire
+	float cooldown = 0.3f;
 
 	void Awake() {
 		//Create a layer mask for the floor layer
@@ -17,18 +20,33 @@ public class PlayerMovement : MonoBehaviour
 		//Setup references
 		anim = GetComponent<Animator> ();
 		playerRigidbody = GetComponent<Rigidbody> ();
+
+		print (hitbox);
 	}
 
 	void FixedUpdate() {
 		//Store the input axes
-		int h = (int)Input.GetAxisRaw ("Horizontal");
-		int v = (int)Input.GetAxisRaw ("Vertical");
+		float h = Input.GetAxisRaw ("Horizontal");
+		float v = Input.GetAxisRaw ("Vertical");
 
 		//Move the player around the scene
 		Move (h, v);
 
 		//Animate the player
 		Animating (h, v);
+
+		if (hitbox != null) {
+			Destroy (hitbox);
+		}
+	}
+
+	void Update() {
+		//Add the time since Update was last called to the timer
+		timer += Time.deltaTime;
+
+		if(Input.GetButton ("Fire1") && timer >= cooldown && Time.timeScale != 0) {
+			Attack(new Vector3(4f, 0.97f, 3.38f), 1f);
+		}
 	}
 
 	void Move(float h, float v) {
@@ -73,5 +91,25 @@ public class PlayerMovement : MonoBehaviour
 
 		//Tell the animator whether or not the player is walking
 		anim.SetBool ("IsWalking", walking);
+	}
+
+	void Attack(Vector3 center, float radius) {
+		//Reset the timer
+		timer = 0f;
+
+		Collider[] hitColliders = Physics.OverlapSphere(center, radius);
+
+		hitbox = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+		hitbox.transform.position = center;
+		hitbox.transform.localScale = new Vector3 (radius, radius, radius);
+		hitbox.renderer.material.color = new Color(1f, 0f, 0f, 0.5f);
+		hitbox.renderer.collider.enabled = false;
+
+		int i = 0;
+		while (i < hitColliders.Length) {
+			if(hitColliders[i].gameObject.layer == 9)
+				print(hitColliders[i]);
+			i++;
+		}
 	}
 }
