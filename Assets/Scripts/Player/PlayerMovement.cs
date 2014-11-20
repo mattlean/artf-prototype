@@ -4,7 +4,7 @@ public class PlayerMovement : MonoBehaviour
 {
 	public float speed = 6f; //The speed that the player will move at
 
-	Vector3 movement; //The vector to store the direction of the player's momvement
+	Vector3 movement; //The vector to store the direction of the player's movement
 	Animator anim; //Reference to the animator's component
 	Rigidbody playerRigidbody; //Reference to the player's rigidbody
 	int floorMask; //A layer mask so that a ray can be cast just a game objs on the floor layer
