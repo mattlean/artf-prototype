@@ -13,7 +13,6 @@ public class PlayerMovement : MonoBehaviour
 	float cooldown = 0.3f;
 	enum direction {up, down, left, right, upleft, upright, downleft, downright};
 	direction playerDirection = direction.up;
-	Vector3 directionVector = Vector3.forward;
 
 	void Awake() {
 		//Create a layer mask for the floor layer
@@ -60,37 +59,56 @@ public class PlayerMovement : MonoBehaviour
 		playerRigidbody.MovePosition (transform.position + movement);
 		
 		if (h == -1) {
-			directionVector = Vector3.left;
 			playerDirection = direction.left;
 		} else if (h == 1) {
 			playerDirection = direction.right;
-			directionVector = Vector3.right;
 		}
 
 		if (v == -1) {
-			directionVector = Vector3.back;
 			playerDirection = direction.down;
 		} else if (v == 1) {
-			directionVector = Vector3.forward;
 			playerDirection = direction.up;
 		}
 
 		if (h == -1 && v == -1) {
-			directionVector = new Vector3(-1, 0, -1);
 			playerDirection = direction.downleft;
 		} else if (h == 1 && v == -1) {
-			directionVector = new Vector3(1, 0, -1);
 			playerDirection = direction.downright;
 		} else if (h == -1 && v == 1) {
-			directionVector = new Vector3(-1, 0, 1);
 			playerDirection = direction.upleft;
 		} else if (h == 1 && v == 1) {
-			directionVector = new Vector3(1, 0, 1);
 			playerDirection = direction.upright;
 		}
 
-		Quaternion newRotation = Quaternion.LookRotation(directionVector, Vector3.up);
-		playerRigidbody.MoveRotation (newRotation);
+		Vector3 tempVector = Vector3.forward;
+		switch ((int)playerDirection) {
+		case 1:
+			tempVector = Vector3.back;
+			break;
+		case 2:
+			tempVector = Vector3.left;
+			break;
+		case 3:
+			tempVector = Vector3.right;
+			break;
+		case 4:
+			tempVector = new Vector3(-1, 0, 1);
+			break;
+		case 5:
+			tempVector = new Vector3(1, 0, 1);
+			break;
+		case 6:
+			tempVector = new Vector3(-1, 0, -1);
+			break;
+		case 7:
+			tempVector = new Vector3(1, 0, -1);
+			break;
+		default:
+			tempVector = Vector3.forward;
+			break;
+		}
+		Quaternion newDirection = Quaternion.LookRotation(tempVector, Vector3.up);
+		playerRigidbody.MoveRotation (newDirection);
 	}
 
 	void Animating(float h, float v) {
