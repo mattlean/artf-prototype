@@ -44,7 +44,11 @@ public class PlayerMovement : MonoBehaviour
 		timer += Time.deltaTime;
 
 		if(Input.GetButton ("Fire1") && timer >= cooldown && Time.timeScale != 0) {
-			Attack(new Vector3(6f, 0.97f, 3.38f), 1f);
+			Attack(1f);
+		}
+
+		if (Input.GetButton ("Fire2") && timer >= cooldown && Time.timeScale != 0) {
+			Psynergy (5f);
 		}
 	}
 
@@ -119,7 +123,7 @@ public class PlayerMovement : MonoBehaviour
 		anim.SetBool ("IsWalking", walking);
 	}
 
-	void Attack(Vector3 center, float radius) {
+	void Attack(float radius) {
 		//Reset the timer
 		timer = 0f;
 
@@ -158,6 +162,53 @@ public class PlayerMovement : MonoBehaviour
 		hitbox.renderer.material.color = new Color(1f, 0f, 0f, 0.5f);
 		hitbox.renderer.collider.enabled = false;
 
+		int i = 0;
+		while (i < hitColliders.Length) {
+			if(hitColliders[i].gameObject.layer == 9)
+				print(hitColliders[i]);
+			i++;
+		}
+	}
+
+	void Psynergy(float radius) {
+		//Reset the timer
+		timer = 0f;
+		
+		Vector3 tempVector = transform.position;
+		switch ((int)playerDirection) {
+		case 1:
+			tempVector = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z - 1);
+			break;
+		case 2:
+			tempVector = new Vector3(transform.position.x - 1, transform.position.y + 0.5f, transform.position.z);
+			break;
+		case 3:
+			tempVector = new Vector3(transform.position.x + 1, transform.position.y + 0.5f, transform.position.z);
+			break;
+		case 4:
+			tempVector = new Vector3(transform.position.x - 1, transform.position.y + 0.5f, transform.position.z + 1);
+			break;
+		case 5:
+			tempVector = new Vector3(transform.position.x + 1, transform.position.y + 0.5f, transform.position.z + 1);
+			break;
+		case 6:
+			tempVector = new Vector3(transform.position.x - 1, transform.position.y + 0.5f, transform.position.z - 1);
+			break;
+		case 7:
+			tempVector = new Vector3(transform.position.x + 1, transform.position.y + 0.5f, transform.position.z - 1);
+			break;
+		default:
+			tempVector = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z + 1);
+			break;
+		}
+		
+		Collider[] hitColliders = Physics.OverlapSphere(tempVector, radius);
+		hitbox = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+		hitbox.transform.position = tempVector;
+		hitbox.transform.localScale = new Vector3 (radius, radius, radius);
+		hitbox.renderer.material.color = new Color(1f, 0f, 0f, 0.5f);
+		hitbox.renderer.collider.enabled = false;
+		
 		int i = 0;
 		while (i < hitColliders.Length) {
 			if(hitColliders[i].gameObject.layer == 9)
