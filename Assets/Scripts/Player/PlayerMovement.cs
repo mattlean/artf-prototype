@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
 	float cooldown = 0.3f;
 	enum direction {up, down, left, right, upleft, upright, downleft, downright};
 	direction playerDirection = direction.up;
+	public GameObject cursor;
 
 	void Awake() {
 		//Create a layer mask for the floor layer
@@ -171,7 +172,7 @@ public class PlayerMovement : MonoBehaviour
 	}
 
 	void Psynergy(float radius) {
-		//Reset the timer
+		/*//Reset the timer
 		timer = 0f;
 		
 		Vector3 tempVector = transform.position;
@@ -214,6 +215,10 @@ public class PlayerMovement : MonoBehaviour
 			if(hitColliders[i].gameObject.layer == 9)
 				print(hitColliders[i]);
 			i++;
-		}
+		}*/
+		print ("psynergy called");
+		Instantiate (cursor, new Vector3(7.71f, 3f, 2.75f), Quaternion.Euler(new Vector3(90, 0, 0)));
+		print (cursor.transform.position);
+		//cursor.transform.Translate(-5, 1, 1);
 	}
 }
