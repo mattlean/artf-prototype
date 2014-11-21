@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
 	enum direction {up, down, left, right, upleft, upright, downleft, downright};
 	direction playerDirection = direction.up;
 	public GameObject cursor;
+	private Transform cursorLocation;
 
 	void Awake() {
 		//Create a layer mask for the floor layer
@@ -22,6 +23,9 @@ public class PlayerMovement : MonoBehaviour
 		//Setup references
 		anim = GetComponent<Animator> ();
 		playerRigidbody = GetComponent<Rigidbody> ();
+		Instantiate (cursor, new Vector3(7.71f, 3f, 2.75f), Quaternion.Euler(new Vector3(90, 0, 0)));
+		cursor.name = "P1Cursor";
+		cursorLocation = GameObject.Find ("P1Cursor(Clone)").GetComponent<Transform>();
 	}
 
 	void FixedUpdate() {
@@ -217,8 +221,9 @@ public class PlayerMovement : MonoBehaviour
 			i++;
 		}*/
 		print ("psynergy called");
-		Instantiate (cursor, new Vector3(7.71f, 3f, 2.75f), Quaternion.Euler(new Vector3(90, 0, 0)));
+
 		print (cursor.transform.position);
-		//cursor.transform.Translate(-5, 1, 1);
+		cursorLocation.position = new Vector3(cursorLocation.position.x - 0.1f, cursorLocation.position.y, cursorLocation.position.z);
+		//cursor.transform.position = new Vector3(cursor.transform.position.x - 0.1f, cursor.transform.position.y, cursor.transform.position.z);
 	}
 }
