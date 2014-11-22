@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
 	direction playerDirection = direction.up;
 	public GameObject cursor;
 	private Transform cursorLocation;
+	bool isCasting = false;
 
 	void Awake() {
 		//Create a layer mask for the floor layer
@@ -23,7 +24,8 @@ public class PlayerMovement : MonoBehaviour
 		//Setup references
 		anim = GetComponent<Animator> ();
 		playerRigidbody = GetComponent<Rigidbody> ();
-		Instantiate (cursor, new Vector3(7.71f, 3f, 2.75f), Quaternion.Euler(new Vector3(90, 0, 0)));
+
+		Instantiate (cursor, new Vector3(transform.position.x, -1f, transform.position.y), Quaternion.Euler(new Vector3(90, 0, 0)));
 		cursor.name = "P1Cursor";
 		cursorLocation = GameObject.Find ("P1Cursor(Clone)").GetComponent<Transform>();
 	}
@@ -52,80 +54,105 @@ public class PlayerMovement : MonoBehaviour
 			Attack(1f);
 		}
 
-		if (Input.GetButton ("Fire2") && timer >= cooldown && Time.timeScale != 0) {
-			Psynergy (5f);
+		if (Input.GetButtonDown ("Fire2")) {
+			PsynergyActivate (5f);
+		} else if (Input.GetButtonUp("Fire2")) {
+			PsynergyRelease();
 		}
 	}
 
 	void Move(float h, float v) {
-		//Set the movement vector based on the axis input
-		movement.Set (h, 0f, v);
+		if (isCasting == false) {
+			//Set the movement vector based on the axis input
+			movement.Set (h, 0f, v);
 
-		//Normalize the movement vector and make it proportional to the speed per second
-		movement = movement.normalized * speed * Time.deltaTime;
+			//Normalize the movement vector and make it proportional to the speed per second
+			movement = movement.normalized * speed * Time.deltaTime;
 
-		//Move the player to its current position plus the movement
-		playerRigidbody.MovePosition (transform.position + movement);
-		
-		if (h == -1) {
-			playerDirection = direction.left;
-		} else if (h == 1) {
-			playerDirection = direction.right;
+			//Move the player to its current position plus the movement
+			playerRigidbody.MovePosition (transform.position + movement);
+			
+			if (h == -1) {
+				playerDirection = direction.left;
+			} else if (h == 1) {
+				playerDirection = direction.right;
+			}
+
+			if (v == -1) {
+				playerDirection = direction.down;
+			} else if (v == 1) {
+				playerDirection = direction.up;
+			}
+
+			if (h == -1 && v == -1) {
+				playerDirection = direction.downleft;
+			} else if (h == 1 && v == -1) {
+				playerDirection = direction.downright;
+			} else if (h == -1 && v == 1) {
+				playerDirection = direction.upleft;
+			} else if (h == 1 && v == 1) {
+				playerDirection = direction.upright;
+			}
+
+			Vector3 tempVector = Vector3.forward;
+			switch ((int)playerDirection) {
+			case 1:
+				tempVector = Vector3.back;
+				break;
+			case 2:
+				tempVector = Vector3.left;
+				break;
+			case 3:
+				tempVector = Vector3.right;
+				break;
+			case 4:
+				tempVector = new Vector3 (-1, 0, 1);
+				break;
+			case 5:
+				tempVector = new Vector3 (1, 0, 1);
+				break;
+			case 6:
+				tempVector = new Vector3 (-1, 0, -1);
+				break;
+			case 7:
+				tempVector = new Vector3 (1, 0, -1);
+				break;
+			default:
+				tempVector = Vector3.forward;
+				break;
+			}
+			Quaternion newDirection = Quaternion.LookRotation (tempVector, Vector3.up);
+			playerRigidbody.MoveRotation (newDirection);
+		} else {
+			float offsetX = 0;
+			float offsetZ = 0;
+
+			if (h == -1) {
+				offsetX = -0.1f;
+			} else if (h == 1) {
+				offsetX = 0.1f;
+			}
+
+			if (v == -1) {
+				offsetZ = -0.1f;
+			} else if (v == 1) {
+				offsetZ = 0.1f;
+			}
+
+			cursorLocation.position = new Vector3(cursorLocation.position.x + offsetX, 3f, cursorLocation.position.z + offsetZ);
 		}
-
-		if (v == -1) {
-			playerDirection = direction.down;
-		} else if (v == 1) {
-			playerDirection = direction.up;
-		}
-
-		if (h == -1 && v == -1) {
-			playerDirection = direction.downleft;
-		} else if (h == 1 && v == -1) {
-			playerDirection = direction.downright;
-		} else if (h == -1 && v == 1) {
-			playerDirection = direction.upleft;
-		} else if (h == 1 && v == 1) {
-			playerDirection = direction.upright;
-		}
-
-		Vector3 tempVector = Vector3.forward;
-		switch ((int)playerDirection) {
-		case 1:
-			tempVector = Vector3.back;
-			break;
-		case 2:
-			tempVector = Vector3.left;
-			break;
-		case 3:
-			tempVector = Vector3.right;
-			break;
-		case 4:
-			tempVector = new Vector3(-1, 0, 1);
-			break;
-		case 5:
-			tempVector = new Vector3(1, 0, 1);
-			break;
-		case 6:
-			tempVector = new Vector3(-1, 0, -1);
-			break;
-		case 7:
-			tempVector = new Vector3(1, 0, -1);
-			break;
-		default:
-			tempVector = Vector3.forward;
-			break;
-		}
-		Quaternion newDirection = Quaternion.LookRotation(tempVector, Vector3.up);
-		playerRigidbody.MoveRotation (newDirection);
 	}
 
 	void Animating(float h, float v) {
-		//Create a boolean that is true if either of the input axes is non-zero
-		bool walking = h != 0f || v != 0f;
+		if (isCasting == false) {
+			//Create a boolean that is true if either of the input axes is non-zero
+			bool walking = h != 0f || v != 0f;
 
-		//Tell the animator whether or not the player is walking
-		anim.SetBool ("IsWalking", walking);
+			//Tell the animator whether or not the player is walking
+			anim.SetBool ("IsWalking", walking);
+		} else {
+			anim.SetBool ("IsWalking", false);
+		}
 	}
 
 	void Attack(float radius) {
@@ -175,55 +202,15 @@ public class PlayerMovement : MonoBehaviour
 		}
 	}
 
-	void Psynergy(float radius) {
-		/*//Reset the timer
-		timer = 0f;
-		
-		Vector3 tempVector = transform.position;
-		switch ((int)playerDirection) {
-		case 1:
-			tempVector = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z - 1);
-			break;
-		case 2:
-			tempVector = new Vector3(transform.position.x - 1, transform.position.y + 0.5f, transform.position.z);
-			break;
-		case 3:
-			tempVector = new Vector3(transform.position.x + 1, transform.position.y + 0.5f, transform.position.z);
-			break;
-		case 4:
-			tempVector = new Vector3(transform.position.x - 1, transform.position.y + 0.5f, transform.position.z + 1);
-			break;
-		case 5:
-			tempVector = new Vector3(transform.position.x + 1, transform.position.y + 0.5f, transform.position.z + 1);
-			break;
-		case 6:
-			tempVector = new Vector3(transform.position.x - 1, transform.position.y + 0.5f, transform.position.z - 1);
-			break;
-		case 7:
-			tempVector = new Vector3(transform.position.x + 1, transform.position.y + 0.5f, transform.position.z - 1);
-			break;
-		default:
-			tempVector = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z + 1);
-			break;
-		}
-		
-		Collider[] hitColliders = Physics.OverlapSphere(tempVector, radius);
-		hitbox = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-		hitbox.transform.position = tempVector;
-		hitbox.transform.localScale = new Vector3 (radius, radius, radius);
-		hitbox.renderer.material.color = new Color(1f, 0f, 0f, 0.5f);
-		hitbox.renderer.collider.enabled = false;
-		
-		int i = 0;
-		while (i < hitColliders.Length) {
-			if(hitColliders[i].gameObject.layer == 9)
-				print(hitColliders[i]);
-			i++;
-		}*/
-		print ("psynergy called");
+	void PsynergyActivate(float radius) {
+		print ("psynergy activated");
+		isCasting = true;
+		cursorLocation.position = new Vector3(transform.position.x - 0.1f, 3f, transform.position.z);
+	}
 
-		print (cursor.transform.position);
-		cursorLocation.position = new Vector3(cursorLocation.position.x - 0.1f, cursorLocation.position.y, cursorLocation.position.z);
-		//cursor.transform.position = new Vector3(cursor.transform.position.x - 0.1f, cursor.transform.position.y, cursor.transform.position.z);
+	void PsynergyRelease() {
+		print ("psynergy released");
+		isCasting = false;
+		cursorLocation.position = new Vector3(0, -1f, 0);
 	}
 }
