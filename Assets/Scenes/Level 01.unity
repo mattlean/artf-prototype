@@ -198,6 +198,10 @@ Prefab:
       propertyPath: m_Constraints
       value: 80
       objectReference: {fileID: 0}
+    - target: {fileID: 10800000, guid: a6b7f828d70b00142b9f599e05d0e2a0, type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11400004, guid: a6b7f828d70b00142b9f599e05d0e2a0, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: a6b7f828d70b00142b9f599e05d0e2a0, type: 2}

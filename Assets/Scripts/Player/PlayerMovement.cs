@@ -35,7 +35,7 @@ public class PlayerMovement : MonoBehaviour
 		float h = Input.GetAxisRaw ("Horizontal");
 		float v = Input.GetAxisRaw ("Vertical");
 
-		//Move the player around the scene
+		//Move the player arwound the scene
 		Move (h, v);
 
 		//Animate the player
@@ -55,9 +55,9 @@ public class PlayerMovement : MonoBehaviour
 		}
 
 		if (Input.GetButtonDown ("Fire2")) {
-			PsynergyActivate (5f);
+			PsynergyActivate ();
 		} else if (Input.GetButtonUp("Fire2")) {
-			PsynergyRelease();
+			PsynergyRelease ();
 		}
 	}
 
@@ -159,41 +159,54 @@ public class PlayerMovement : MonoBehaviour
 		//Reset the timer
 		timer = 0f;
 
-		Vector3 tempVector = transform.position;
+		float hsPosX = transform.position.x;
+		float hsPosY = transform.position.y + 0.5f;
+		float hsPosZ = transform.position.z;
+
 		switch ((int)playerDirection) {
 		case 1:
-			tempVector = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z - 1);
+			hsPosZ -= 1;
 			break;
 		case 2:
-			tempVector = new Vector3(transform.position.x - 1, transform.position.y + 0.5f, transform.position.z);
+			hsPosX -= 1;
 			break;
 		case 3:
-			tempVector = new Vector3(transform.position.x + 1, transform.position.y + 0.5f, transform.position.z);
+			hsPosX += 1;
 			break;
 		case 4:
-			tempVector = new Vector3(transform.position.x - 1, transform.position.y + 0.5f, transform.position.z + 1);
+			hsPosX -= 1;
+			hsPosZ += 1;
 			break;
 		case 5:
-			tempVector = new Vector3(transform.position.x + 1, transform.position.y + 0.5f, transform.position.z + 1);
+			hsPosX += 1;
+			hsPosZ += 1;
 			break;
 		case 6:
-			tempVector = new Vector3(transform.position.x - 1, transform.position.y + 0.5f, transform.position.z - 1);
+			hsPosX -= 1;
+			hsPosZ -= 1;
 			break;
 		case 7:
-			tempVector = new Vector3(transform.position.x + 1, transform.position.y + 0.5f, transform.position.z - 1);
+			hsPosX += 1;
+			hsPosZ -= 1;
 			break;
 		default:
-			tempVector = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z + 1);
+			hsPosZ += 1;
 			break;
 		}
 
-		Collider[] hitColliders = Physics.OverlapSphere(tempVector, radius);
+		Vector3 hsVector = new Vector3(hsPosX, hsPosY, hsPosZ);
+
+		createHitsphere (hsVector, 1f);
+	}
+
+	void createHitsphere(Vector3 hsVector, float radius) {
+		Collider[] hitColliders = Physics.OverlapSphere(hsVector, radius);
 		hitbox = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-		hitbox.transform.position = tempVector;
+		hitbox.transform.position = hsVector;
 		hitbox.transform.localScale = new Vector3 (radius, radius, radius);
 		hitbox.renderer.material.color = new Color(1f, 0f, 0f, 0.5f);
 		hitbox.renderer.collider.enabled = false;
-
+		
 		int i = 0;
 		while (i < hitColliders.Length) {
 			if(hitColliders[i].gameObject.layer == 9)
@@ -202,14 +215,14 @@ public class PlayerMovement : MonoBehaviour
 		}
 	}
 
-	void PsynergyActivate(float radius) {
-		print ("psynergy activated");
+	void PsynergyActivate() {
 		isCasting = true;
-		cursorLocation.position = new Vector3(transform.position.x - 0.1f, 3f, transform.position.z);
+		cursorLocation.position = new Vector3(transform.position.x, 3f, transform.position.z);
 	}
 
 	void PsynergyRelease() {
 		print ("psynergy released");
+		createHitsphere(new Vector3(cursorLocation.position.x, 0f, cursorLocation.position.z), 3);
 		isCasting = false;
 		cursorLocation.position = new Vector3(0, -1f, 0);
 	}
