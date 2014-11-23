@@ -18,6 +18,8 @@ public class PlayerMovement : MonoBehaviour
 	bool isCasting = false;
 	bool psyMove = false;
 	List<Collider> psyObjs = new List<Collider>();
+	bool isLifting = false;
+	Collider pillar;
 
 	void Awake() {
 		//Setup references
@@ -42,6 +44,14 @@ public class PlayerMovement : MonoBehaviour
 
 		if (hitbox != null) {
 			Destroy (hitbox);
+		}
+
+		if (isLifting) {
+			if(psyObjs[0].transform.position.y <= .5) {
+				pillar.transform.position = new Vector3(psyObjs[0].transform.position.x, psyObjs[0].transform.position.y + 0.01f, psyObjs[0].transform.position.z);
+			} else {
+				isLifting = false;
+			}
 		}
 	}
 
@@ -239,7 +249,7 @@ public class PlayerMovement : MonoBehaviour
 			psyObjs = affectedObjs;
 			print (psyObjs);
 		} else {
-			PsynergyStop();		
+			PsynergyStop();	
 		}
 
 		cursorLocation.position = new Vector3(0, -1f, 0);
@@ -283,9 +293,9 @@ public class PlayerMovement : MonoBehaviour
 		List<Collider> affectedObjs = createHitsphere(new Vector3(cursorLocation.position.x, 0f, cursorLocation.position.z), 2, 10);
 		if (affectedObjs.Count != 0) {
 			psyMove = true;
+			isLifting = true;
 			psyObjs = affectedObjs;
-			print (psyObjs);
-			psyObjs[0].transform.position = new Vector3(psyObjs[0].transform.position.x, psyObjs[0].transform.position.y + 0.99f, psyObjs[0].transform.position.z);
+			pillar = psyObjs[0];
 		}
 		PsynergyStop();	
 	}
