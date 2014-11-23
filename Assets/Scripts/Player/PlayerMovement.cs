@@ -8,7 +8,6 @@ public class PlayerMovement : MonoBehaviour
 	Vector3 movement; //The vector to store the direction of the player's movement
 	Animator anim; //Reference to the animator's component
 	Rigidbody playerRigidbody; //Reference to the player's rigidbody
-	int floorMask; //A layer mask so that a ray can be cast just a game objs on the floor layer
 	GameObject hitbox;
 	float timer; //A timer to determine when to fire
 	float cooldown = 0.3f;
@@ -21,9 +20,6 @@ public class PlayerMovement : MonoBehaviour
 	List<Collider> psyObjs = new List<Collider>();
 
 	void Awake() {
-		//Create a layer mask for the floor layer
-		floorMask = LayerMask.GetMask ("Floor");
-
 		//Setup references
 		anim = GetComponent<Animator> ();
 		playerRigidbody = GetComponent<Rigidbody> ();
@@ -59,8 +55,12 @@ public class PlayerMovement : MonoBehaviour
 
 		if (Input.GetButtonDown ("Fire2") && psyMove == false) {
 			PsynergyActivate ();
-		} else if (Input.GetButtonUp("Fire2") && psyMove == false) {
+		} else if (Input.GetButtonUp ("Fire2") && psyMove == false) {
 			PsynergyRelease ();
+		}else if(Input.GetButtonDown ("Lift") && psyMove == false) {
+			LiftActivate();
+		} else if(Input.GetButtonUp ("Lift") && psyMove == false){
+			LiftRelease ();
 		} else if (psyMove) {
 			psyMoveControl();
 		}
@@ -201,10 +201,10 @@ public class PlayerMovement : MonoBehaviour
 
 		Vector3 hsVector = new Vector3(hsPosX, hsPosY, hsPosZ);
 
-		createHitsphere (hsVector, 1f);
+		createHitsphere (hsVector, 1f, 9);
 	}
 
-	List<Collider> createHitsphere(Vector3 hsVector, float radius) {
+	List<Collider> createHitsphere(Vector3 hsVector, float radius, int layerID) {
 		Collider[] hitColliders = Physics.OverlapSphere(hsVector, radius);
 		hitbox = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 		hitbox.transform.position = hsVector;
@@ -215,8 +215,8 @@ public class PlayerMovement : MonoBehaviour
 		int i = 0;
 		List<Collider> affectedObjs = new List<Collider>();
 		while (i < hitColliders.Length) {
-			if(hitColliders[i].gameObject.layer == 9) {
-				//hitColliders[i].transform.position = new Vector3(0f, 1f, 0f);
+			if(hitColliders[i].gameObject.layer == layerID) {
+				print (hitColliders[i]);
 				affectedObjs.Add(hitColliders[i]);
 			}
 			i++;
@@ -233,7 +233,7 @@ public class PlayerMovement : MonoBehaviour
 
 	void PsynergyRelease() {
 		print ("psynergy released");
-		List<Collider> affectedObjs = createHitsphere(new Vector3(cursorLocation.position.x, 0f, cursorLocation.position.z), 3);
+		List<Collider> affectedObjs = createHitsphere(new Vector3(cursorLocation.position.x, 0f, cursorLocation.position.z), 3, 9);
 		if (affectedObjs.Count != 0) {
 			psyMove = true;
 			psyObjs = affectedObjs;
@@ -270,6 +270,24 @@ public class PlayerMovement : MonoBehaviour
 		}
 
 		psyObjs[0].transform.position = new Vector3(psyObjs[0].transform.position.x + offsetX, psyObjs[0].transform.position.y, psyObjs[0].transform.position.z + offsetZ);
+	}
+
+	void LiftActivate() {
+		print ("lift activated");
+		isCasting = true;
+		cursorLocation.position = new Vector3(transform.position.x, 3f, transform.position.z);
+	}
+
+	void LiftRelease() {
+		print ("lift deactivated");
+		List<Collider> affectedObjs = createHitsphere(new Vector3(cursorLocation.position.x, 0f, cursorLocation.position.z), 2, 10);
+		if (affectedObjs.Count != 0) {
+			psyMove = true;
+			psyObjs = affectedObjs;
+			print (psyObjs);
+			psyObjs[0].transform.position = new Vector3(psyObjs[0].transform.position.x, psyObjs[0].transform.position.y + 0.99f, psyObjs[0].transform.position.z);
+		}
+		PsynergyStop();	
 	}
 
 	void PsynergyStop() {
