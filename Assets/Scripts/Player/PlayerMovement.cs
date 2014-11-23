@@ -247,7 +247,26 @@ public class PlayerMovement : MonoBehaviour
 	}
 
 	void psyMoveControl() {
-		psyObjs[0].transform.position = new Vector3(1f, 1f, 1f);
+		float h = Input.GetAxisRaw ("Horizontal");
+		float v = Input.GetAxisRaw ("Vertical");
+
+		float offsetX = 0;
+		float offsetZ = 0;
+		float moveSpeed = 0.02f;
+
+		if (h == -1) {
+			offsetX = -moveSpeed;
+		} else if (h == 1) {
+			offsetX = moveSpeed;
+		}
+		
+		if (v == -1) {
+			offsetZ = -moveSpeed;
+		} else if (v == 1) {
+			offsetZ = moveSpeed;
+		}
+
+		psyObjs[0].transform.position = new Vector3(psyObjs[0].transform.position.x + offsetX, psyObjs[0].transform.position.y, psyObjs[0].transform.position.z + offsetZ);
 	}
 
 	void PsynergyStop() {
