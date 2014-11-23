@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+using UnityEngine;
+using System.Collections.Generic;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class PlayerMovement : MonoBehaviour
 	public GameObject cursor;
 	private Transform cursorLocation;
 	bool isCasting = false;
+	bool psyMove = false;
+	List<Collider> psyObjs = new List<Collider>();
 
 	void Awake() {
 		//Create a layer mask for the floor layer
@@ -58,6 +61,10 @@ public class PlayerMovement : MonoBehaviour
 			PsynergyActivate ();
 		} else if (Input.GetButtonUp("Fire2")) {
 			PsynergyRelease ();
+		}
+
+		if (psyMove) {
+			psyMoveControl();
 		}
 	}
 
@@ -123,7 +130,7 @@ public class PlayerMovement : MonoBehaviour
 			}
 			Quaternion newDirection = Quaternion.LookRotation (tempVector, Vector3.up);
 			playerRigidbody.MoveRotation (newDirection);
-		} else {
+		} else if(psyMove == false) {
 			float offsetX = 0;
 			float offsetZ = 0;
 
@@ -199,7 +206,7 @@ public class PlayerMovement : MonoBehaviour
 		createHitsphere (hsVector, 1f);
 	}
 
-	void createHitsphere(Vector3 hsVector, float radius) {
+	List<Collider> createHitsphere(Vector3 hsVector, float radius) {
 		Collider[] hitColliders = Physics.OverlapSphere(hsVector, radius);
 		hitbox = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 		hitbox.transform.position = hsVector;
@@ -208,11 +215,16 @@ public class PlayerMovement : MonoBehaviour
 		hitbox.renderer.collider.enabled = false;
 		
 		int i = 0;
+		List<Collider> affectedObjs = new List<Collider>();
 		while (i < hitColliders.Length) {
-			if(hitColliders[i].gameObject.layer == 9)
-				print(hitColliders[i]);
+			if(hitColliders[i].gameObject.layer == 9) {
+				//hitColliders[i].transform.position = new Vector3(0f, 1f, 0f);
+				affectedObjs.Add(hitColliders[i]);
+			}
 			i++;
 		}
+
+		return affectedObjs;
 	}
 
 	void PsynergyActivate() {
@@ -222,8 +234,23 @@ public class PlayerMovement : MonoBehaviour
 
 	void PsynergyRelease() {
 		print ("psynergy released");
-		createHitsphere(new Vector3(cursorLocation.position.x, 0f, cursorLocation.position.z), 3);
-		isCasting = false;
+		List<Collider> affectedObjs = createHitsphere(new Vector3(cursorLocation.position.x, 0f, cursorLocation.position.z), 3);
+		if (affectedObjs.Count != 0) {
+			psyMove = true;
+			psyObjs = affectedObjs;
+			print (psyObjs);
+		} else {
+			PsynergyStop();		
+		}
+
 		cursorLocation.position = new Vector3(0, -1f, 0);
+	}
+
+	void psyMoveControl() {
+		psyObjs[0].transform.position = new Vector3(1f, 1f, 1f);
+	}
+
+	void PsynergyStop() {
+		isCasting = false;
 	}
 }
