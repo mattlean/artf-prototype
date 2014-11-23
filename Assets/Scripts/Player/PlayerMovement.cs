@@ -57,13 +57,11 @@ public class PlayerMovement : MonoBehaviour
 			Attack(1f);
 		}
 
-		if (Input.GetButtonDown ("Fire2")) {
+		if (Input.GetButtonDown ("Fire2") && psyMove == false) {
 			PsynergyActivate ();
-		} else if (Input.GetButtonUp("Fire2")) {
+		} else if (Input.GetButtonUp("Fire2") && psyMove == false) {
 			PsynergyRelease ();
-		}
-
-		if (psyMove) {
+		} else if (psyMove) {
 			psyMoveControl();
 		}
 	}
@@ -228,6 +226,7 @@ public class PlayerMovement : MonoBehaviour
 	}
 
 	void PsynergyActivate() {
+		print ("psynergy activated");
 		isCasting = true;
 		cursorLocation.position = new Vector3(transform.position.x, 3f, transform.position.z);
 	}
@@ -247,6 +246,10 @@ public class PlayerMovement : MonoBehaviour
 	}
 
 	void psyMoveControl() {
+		if (Input.GetButtonUp ("Fire2")) {
+			PsynergyStop ();
+		}
+
 		float h = Input.GetAxisRaw ("Horizontal");
 		float v = Input.GetAxisRaw ("Vertical");
 
@@ -271,5 +274,7 @@ public class PlayerMovement : MonoBehaviour
 
 	void PsynergyStop() {
 		isCasting = false;
+		psyMove = false;
+		cursorLocation.position = new Vector3(0, -1f, 0);
 	}
 }
