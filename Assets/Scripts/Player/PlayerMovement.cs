@@ -208,10 +208,11 @@ public class PlayerMovement : MonoBehaviour
 			hsPosZ += 1;
 			break;
 		}
-
 		Vector3 hsVector = new Vector3(hsPosX, hsPosY, hsPosZ);
-
-		createHitsphere (hsVector, 1f, 9);
+		
+		List<Collider> hitObjs = createHitsphere (hsVector, 1f, 9);
+		hitObjs[0].transform.Rotate(Vector3.right, 180);
+		hitObjs[0].transform.position = new Vector3(hitObjs[0].transform.position.x, 0.51f, hitObjs[0].transform.position.z);
 	}
 
 	List<Collider> createHitsphere(Vector3 hsVector, float radius, int layerID) {
