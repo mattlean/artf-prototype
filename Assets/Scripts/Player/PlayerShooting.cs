@@ -65,7 +65,7 @@ public class PlayerShooting : MonoBehaviour
         timer = 0f;
 
 		//Play the gun shot audioclip
-        gunAudio.Play ();
+        //gunAudio.Play ();
 
 		//Enable the light
         gunLight.enabled = true;
