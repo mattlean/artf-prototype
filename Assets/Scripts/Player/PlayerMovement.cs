@@ -47,7 +47,7 @@ public class PlayerMovement : MonoBehaviour
 		}
 
 		if (isLifting) {
-			if(psyObjs[0].transform.position.y <= .5) {
+			if(psyObjs[0].transform.position.y <= 0.884) {
 				pillar.transform.position = new Vector3(psyObjs[0].transform.position.x, psyObjs[0].transform.position.y + 0.01f, psyObjs[0].transform.position.z);
 			} else {
 				isLifting = false;
@@ -279,7 +279,12 @@ public class PlayerMovement : MonoBehaviour
 			offsetZ = moveSpeed;
 		}
 
-		psyObjs[0].transform.position = new Vector3(psyObjs[0].transform.position.x + offsetX, psyObjs[0].transform.position.y, psyObjs[0].transform.position.z + offsetZ);
+		if (psyObjs [0].name == "Boulder") {
+			psyObjs[0].rigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;
+			PsynergyStop();
+		} else {
+			psyObjs [0].transform.position = new Vector3 (psyObjs [0].transform.position.x + offsetX, psyObjs [0].transform.position.y, psyObjs [0].transform.position.z + offsetZ);
+		}
 	}
 
 	void LiftActivate() {
