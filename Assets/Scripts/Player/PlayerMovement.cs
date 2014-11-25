@@ -20,6 +20,8 @@ public class PlayerMovement : MonoBehaviour
 	List<Collider> psyObjs = new List<Collider>();
 	bool isLifting = false;
 	Collider pillar;
+	bool plateTrigger = false;
+	Transform bridge;
 
 	void Awake() {
 		//Setup references
@@ -29,6 +31,8 @@ public class PlayerMovement : MonoBehaviour
 		Instantiate (cursor, new Vector3(transform.position.x, -1f, transform.position.y), Quaternion.Euler(new Vector3(90, 0, 0)));
 		cursor.name = "P1Cursor";
 		cursorLocation = GameObject.Find ("P1Cursor(Clone)").GetComponent<Transform>();
+
+		bridge = GameObject.Find ("Bridge").GetComponent<Transform>();
 	}
 
 	void FixedUpdate() {
@@ -59,9 +63,9 @@ public class PlayerMovement : MonoBehaviour
 		//Add the time since Update was last called to the timer
 		timer += Time.deltaTime;
 
-		if(Input.GetButton ("Fire1") && timer >= cooldown && Time.timeScale != 0) {
-			//Attack(1f);
-		}
+		/*if(Input.GetButton ("Fire1") && timer >= cooldown && Time.timeScale != 0) {
+			Attack(1f);
+		}*/
 
 		if (Input.GetButtonDown ("Fire2") && psyMove == false) {
 			PsynergyActivate ();
@@ -73,6 +77,10 @@ public class PlayerMovement : MonoBehaviour
 			LiftRelease ();
 		} else if (psyMove) {
 			psyMoveControl();
+		}
+
+		if (plateTrigger && bridge.position.x >= -26.45) {
+			bridge.position = new Vector3(bridge.position.x - 0.1f, bridge.position.y, bridge.position.z);
 		}
 	}
 
@@ -266,6 +274,11 @@ public class PlayerMovement : MonoBehaviour
 				psyObjs[0].gameObject.renderer.material.SetColor("_Color", new Color(1, 1, 1, 0.5f));
 			}
 			PsynergyStop ();
+		}
+
+		if (psyObjs[0].name == "Pillar2" && psyObjs[0].transform.position.x <= -29.63f) {
+			print ("trigger connected");
+			plateTrigger = true;
 		}
 
 		float h = Input.GetAxisRaw ("Horizontal");
