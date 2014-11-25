@@ -257,8 +257,8 @@ public class PlayerMovement : MonoBehaviour
 			psyMove = true;
 			psyObjs = affectedObjs;
 			//print (psyObjs[0].gameObject.renderer.material.color);
-			psyObjs[0].gameObject.renderer.material.SetColor("_Color", Color.blue);
-			print (psyObjs);
+			if(psyObjs[0].name != "monster")
+				psyObjs[0].gameObject.renderer.material.SetColor("_Color", Color.blue);
 		} else {
 			PsynergyStop();	
 		}
