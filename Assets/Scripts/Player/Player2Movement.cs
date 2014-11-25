@@ -39,6 +39,19 @@ public class Player2Movement : MonoBehaviour
 		
 		//Animate the player
 		Animating (h, v);
+
+		if (hitbox != null) {
+			Destroy (hitbox);
+		}
+	}
+
+	void Update() {
+		//Add the time since Update was last called to the timer
+		timer += Time.deltaTime;
+
+		if(Input.GetButton ("Fire1") && timer >= cooldown && Time.timeScale != 0) {
+			Attack(1f);
+		}
 	}
 	
 	void Move(float h, float v) {
@@ -119,6 +132,74 @@ public class Player2Movement : MonoBehaviour
 				offsetZ = 0.1f;
 			}
 		}
+	}
+
+	void Attack(float radius) {
+		//Reset the timer
+		timer = 0f;
+		
+		float hsPosX = transform.position.x;
+		float hsPosY = transform.position.y + 0.5f;
+		float hsPosZ = transform.position.z;
+		
+		switch ((int)playerDirection) {
+		case 1:
+			hsPosZ -= 1;
+			break;
+		case 2:
+			hsPosX -= 1;
+			break;
+		case 3:
+			hsPosX += 1;
+			break;
+		case 4:
+			hsPosX -= 1;
+			hsPosZ += 1;
+			break;
+		case 5:
+			hsPosX += 1;
+			hsPosZ += 1;
+			break;
+		case 6:
+			hsPosX -= 1;
+			hsPosZ -= 1;
+			break;
+		case 7:
+			hsPosX += 1;
+			hsPosZ -= 1;
+			break;
+		default:
+			hsPosZ += 1;
+			break;
+		}
+		Vector3 hsVector = new Vector3(hsPosX, hsPosY, hsPosZ);
+		
+		List<Collider> hitObjs = createHitsphere (hsVector, 1f, 9);
+		if (hitObjs.Count > 0) {
+			hitObjs [0].transform.Rotate (Vector3.right, 180);
+			hitObjs [0].transform.position = new Vector3 (hitObjs [0].transform.position.x, 0.51f, hitObjs [0].transform.position.z);
+		}
+	}
+	
+	List<Collider> createHitsphere(Vector3 hsVector, float radius, int layerID) {
+		Collider[] hitColliders = Physics.OverlapSphere(hsVector, radius);
+		hitbox = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+		hitbox.transform.position = hsVector;
+		hitbox.transform.localScale = new Vector3 (radius, radius, radius);
+		hitbox.renderer.material.color = new Color(1f, 0f, 0f, 0.5f);
+		hitbox.renderer.collider.enabled = false;
+		
+		int i = 0;
+		List<Collider> affectedObjs = new List<Collider>();
+		while (i < hitColliders.Length) {
+			if(hitColliders[i].gameObject.layer == layerID) {
+				print (hitColliders[i]);
+				affectedObjs.Add(hitColliders[i]);
+			}
+			i++;
+		}
+		
+		return affectedObjs;
 	}
 
 	void MoveMonster(float h, float v) {

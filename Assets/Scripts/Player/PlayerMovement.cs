@@ -42,16 +42,16 @@ public class PlayerMovement : MonoBehaviour
 		//Animate the player
 		Animating (h, v);
 
-		if (hitbox != null) {
-			Destroy (hitbox);
-		}
-
 		if (isLifting) {
 			if(psyObjs[0].transform.position.y <= 0.884) {
 				pillar.transform.position = new Vector3(psyObjs[0].transform.position.x, psyObjs[0].transform.position.y + 0.01f, psyObjs[0].transform.position.z);
 			} else {
 				isLifting = false;
 			}
+		}
+
+		if (hitbox != null) {
+			Destroy (hitbox);
 		}
 	}
 
@@ -60,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
 		timer += Time.deltaTime;
 
 		if(Input.GetButton ("Fire1") && timer >= cooldown && Time.timeScale != 0) {
-			Attack(1f);
+			//Attack(1f);
 		}
 
 		if (Input.GetButtonDown ("Fire2") && psyMove == false) {
@@ -170,7 +170,7 @@ public class PlayerMovement : MonoBehaviour
 		}
 	}
 
-	void Attack(float radius) {
+	/*void Attack(float radius) {
 		//Reset the timer
 		timer = 0f;
 
@@ -213,7 +213,7 @@ public class PlayerMovement : MonoBehaviour
 		List<Collider> hitObjs = createHitsphere (hsVector, 1f, 9);
 		hitObjs[0].transform.Rotate(Vector3.right, 180);
 		hitObjs[0].transform.position = new Vector3(hitObjs[0].transform.position.x, 0.51f, hitObjs[0].transform.position.z);
-	}
+	}*/
 
 	List<Collider> createHitsphere(Vector3 hsVector, float radius, int layerID) {
 		Collider[] hitColliders = Physics.OverlapSphere(hsVector, radius);
