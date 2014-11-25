@@ -283,6 +283,11 @@ public class PlayerMovement : MonoBehaviour
 		if (psyObjs [0].name == "Boulder") {
 			psyObjs[0].rigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;
 			PsynergyStop();
+		} else if(psyObjs [0].name == "monster") {
+			Player2Movement p2 = GameObject.Find ("Player2").GetComponent<Player2Movement>();
+			p2.freezeMonster = true;
+			print (p2.freezeMonster);
+			PsynergyStop();
 		} else {
 			psyObjs [0].transform.position = new Vector3 (psyObjs [0].transform.position.x + offsetX, psyObjs [0].transform.position.y, psyObjs [0].transform.position.z + offsetZ);
 		}

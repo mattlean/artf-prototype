@@ -776,7 +776,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 316864708}
   m_LocalRotation: {x: .258819044, y: 0, z: 0, w: .965925813}
-  m_LocalPosition: {x: 1, y: 15, z: -22}
+  m_LocalPosition: {x: .370000005, y: 14.1099997, z: -22.5100002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1151,7 +1151,7 @@ Transform:
   m_PrefabInternal: {fileID: 1902297114}
   m_GameObject: {fileID: 524391238}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -.0309999995, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 958825241}
@@ -1288,6 +1288,7 @@ GameObject:
   - 4: {fileID: 545375916}
   - 111: {fileID: 545375917}
   - 65: {fileID: 545375918}
+  - 54: {fileID: 545375919}
   m_Layer: 9
   m_Name: monster
   m_TagString: Untagged
@@ -1302,7 +1303,7 @@ Transform:
   m_PrefabInternal: {fileID: 780903779}
   m_GameObject: {fileID: 545375915}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.76999998, y: 0, z: -5}
+  m_LocalPosition: {x: -4.76999998, y: .0579999983, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 976208871}
@@ -1355,8 +1356,23 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: .800000012, z: 1}
+  m_Center: {x: 0, y: .400000006, z: 0}
+--- !u!54 &545375919
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 545375915}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: .0500000007
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &592769783
 GameObject:
   m_ObjectHideFlags: 0
@@ -1654,7 +1670,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400140, guid: bc600cce01eb57a409f4e69025868a2c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: .0579999983
       objectReference: {fileID: 0}
     - target: {fileID: 400140, guid: bc600cce01eb57a409f4e69025868a2c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4307,7 +4323,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1345386055}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.72591066, y: 4.375228e-07, z: -1.44422579}
+  m_LocalPosition: {x: -4.90999985, y: -.0390000008, z: -2.04999995}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 269946356}
@@ -4328,6 +4344,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 6
+  freezeMonster: 0
 --- !u!82 &1345386058
 AudioSource:
   m_ObjectHideFlags: 0
@@ -6602,7 +6619,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: a6b7f828d70b00142b9f599e05d0e2a0, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -.0309999995
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: a6b7f828d70b00142b9f599e05d0e2a0, type: 2}
       propertyPath: m_LocalPosition.z

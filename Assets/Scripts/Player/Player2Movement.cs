@@ -18,6 +18,7 @@ public class Player2Movement : MonoBehaviour
 	List<Collider> psyObjs = new List<Collider>();
 	bool isLifting = false;
 	Collider pillar;
+	public bool freezeMonster = false;
 	
 	void Awake() {
 		//Setup references
@@ -122,7 +123,7 @@ public class Player2Movement : MonoBehaviour
 
 	void MoveMonster(float h, float v) {
 		Transform monster = GameObject.Find ("monster").GetComponent<Transform>();
-		if(v == -1)
+		if(v == -1 && freezeMonster == false)
 			monster.position = new Vector3 (monster.position.x, monster.position.y, monster.position.z - 0.15f);
 	}
 	
