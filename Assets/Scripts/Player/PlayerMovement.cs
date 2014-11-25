@@ -248,6 +248,8 @@ public class PlayerMovement : MonoBehaviour
 		if (affectedObjs.Count != 0) {
 			psyMove = true;
 			psyObjs = affectedObjs;
+			print (psyObjs[0].gameObject.renderer.material);
+			psyObjs[0].gameObject.renderer.material.SetColor("_Color", new Color(0f, 0f, 1f, 0.5f));
 			print (psyObjs);
 		} else {
 			PsynergyStop();	
