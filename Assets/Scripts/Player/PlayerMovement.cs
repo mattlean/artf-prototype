@@ -217,11 +217,11 @@ public class PlayerMovement : MonoBehaviour
 
 	List<Collider> createHitsphere(Vector3 hsVector, float radius, int layerID) {
 		Collider[] hitColliders = Physics.OverlapSphere(hsVector, radius);
-		hitbox = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+		/*hitbox = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 		hitbox.transform.position = hsVector;
 		hitbox.transform.localScale = new Vector3 (radius, radius, radius);
 		hitbox.renderer.material.color = new Color(1f, 0f, 0f, 0.5f);
-		hitbox.renderer.collider.enabled = false;
+		hitbox.renderer.collider.enabled = false;*/
 		
 		int i = 0;
 		List<Collider> affectedObjs = new List<Collider>();
@@ -248,8 +248,8 @@ public class PlayerMovement : MonoBehaviour
 		if (affectedObjs.Count != 0) {
 			psyMove = true;
 			psyObjs = affectedObjs;
-			print (psyObjs[0].gameObject.renderer.material);
-			psyObjs[0].gameObject.renderer.material.SetColor("_Color", new Color(0f, 0f, 1f, 0.5f));
+			print (psyObjs[0].gameObject.renderer.material.color);
+			psyObjs[0].gameObject.renderer.material.SetColor("_Color", Color.blue);
 			print (psyObjs);
 		} else {
 			PsynergyStop();	
@@ -260,6 +260,11 @@ public class PlayerMovement : MonoBehaviour
 
 	void psyMoveControl() {
 		if (Input.GetButtonUp ("Fire2")) {
+			if (psyObjs[0].name == "Pillar2") {
+				psyObjs[0].gameObject.renderer.material.SetColor("_Color", new Color(1, 0.641f, 0, 0.5f));
+			} else {
+				psyObjs[0].gameObject.renderer.material.SetColor("_Color", new Color(1, 1, 1, 0.5f));
+			}
 			PsynergyStop ();
 		}
 
@@ -288,7 +293,6 @@ public class PlayerMovement : MonoBehaviour
 		} else if(psyObjs [0].name == "monster") {
 			Player2Movement p2 = GameObject.Find ("Player2").GetComponent<Player2Movement>();
 			p2.freezeMonster = true;
-			print (p2.freezeMonster);
 			PsynergyStop();
 		} else {
 			psyObjs [0].transform.position = new Vector3 (psyObjs [0].transform.position.x + offsetX, psyObjs [0].transform.position.y, psyObjs [0].transform.position.z + offsetZ);
