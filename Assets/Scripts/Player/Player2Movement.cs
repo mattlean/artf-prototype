@@ -32,6 +32,9 @@ public class Player2Movement : MonoBehaviour
 		
 		//Move the player arwound the scene
 		Move (h, v);
+
+		//Move spider
+		MoveMonster (h, v);
 		
 		//Animate the player
 		Animating (h, v);
@@ -115,6 +118,12 @@ public class Player2Movement : MonoBehaviour
 				offsetZ = 0.1f;
 			}
 		}
+	}
+
+	void MoveMonster(float h, float v) {
+		Transform monster = GameObject.Find ("monster").GetComponent<Transform>();
+		if(v == -1)
+			monster.position = new Vector3 (monster.position.x, monster.position.y, monster.position.z - 0.15f);
 	}
 	
 	void Animating(float h, float v) {
