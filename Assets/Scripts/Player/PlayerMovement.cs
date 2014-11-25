@@ -256,7 +256,7 @@ public class PlayerMovement : MonoBehaviour
 		if (affectedObjs.Count != 0) {
 			psyMove = true;
 			psyObjs = affectedObjs;
-			print (psyObjs[0].gameObject.renderer.material.color);
+			//print (psyObjs[0].gameObject.renderer.material.color);
 			psyObjs[0].gameObject.renderer.material.SetColor("_Color", Color.blue);
 			print (psyObjs);
 		} else {
