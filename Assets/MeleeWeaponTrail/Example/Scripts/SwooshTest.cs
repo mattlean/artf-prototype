@@ -32,30 +32,33 @@ public class SwooshTest : MonoBehaviour
 		_endN = _end/frames;
 		_animationState = animation[_animation.name];
 		_trail.Emit = false;
+		_animationState.speed = 0;
+		_animationState.wrapMode = WrapMode.Once;
 	}
 	
 	void Update()
 	{
-		_time += _animationState.normalizedTime - _prevAnimTime;
-		if (_time > 1.0f || _firstFrame)
-		{
-			if (!_firstFrame)
-			{
-				_time -= 1.0f;
+		if(Input.GetKeyDown(KeyCode.U)){
+			_animationState.speed = 1;
+			print ("keydown");
+		}
+
+			_time += _animationState.normalizedTime - _prevAnimTime;
+			if (_time > 1.0f || _firstFrame) {
+				if (!_firstFrame) {
+					_time -= 1.0f;
+				}
+				_firstFrame = false;
 			}
-			_firstFrame = false;
-		}
 		
-		if (_prevTime < _startN && _time >= _startN)
-		{
-			_trail.Emit = true;
-		}
-		else if (_prevTime < _endN && _time >= _endN)
-		{
-			_trail.Emit = false;
-		}
+			if (_prevTime < _startN && _time >= _startN) {
+				_trail.Emit = true;
+			} else if (_prevTime < _endN && _time >= _endN) {
+				_trail.Emit = false;
+			}
 		
-		_prevTime = _time;
-		_prevAnimTime = _animationState.normalizedTime;
+			_prevTime = _time;
+			_prevAnimTime = _animationState.normalizedTime;
+
 	}
 }

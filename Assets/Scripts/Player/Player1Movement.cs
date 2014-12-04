@@ -152,9 +152,13 @@ public class Player1Movement : MonoBehaviour {
 			if (affectedObjs.Count != 0) {
 				psyObjs = affectedObjs;
 				print (psyObjs[0]);
-				//if(psyObjs[0].name != "monster")
 				psyObjs[0].rigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;
-				psyObjs[0].gameObject.renderer.material.SetColor("_Color", Color.blue);
+				if(psyObjs[0].name == "SPIDER") {
+					psyObjs[0].GetComponentInChildren<Transform>().Find("Mesh").renderer.material.SetColor ("_Color", Color.blue);
+				} else {
+					psyObjs[0].gameObject.renderer.material.SetColor("_Color", Color.blue);
+				}
+
 			}
 
 			reticleLocation.position = new Vector3(0, -1f, 0);

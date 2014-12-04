@@ -53,6 +53,7 @@
      <Compile Include="Assets\MeleeWeaponTrail\Scripts\MeleeWeaponTrail.cs" />
      <Compile Include="Assets\Scripts\Player\Player1Movement.cs" />
      <Compile Include="Assets\Scripts\Player\Player2Movement.cs" />
+     <Compile Include="Assets\Scripts\Player\SpiderMovement.cs" />
      <None Include="Assets\Standard Assets\Projectors\Guidelines.txt" />
      <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Multiply.shader" />
      <None Include="Assets\MeleeWeaponTrail\README.txt" />
