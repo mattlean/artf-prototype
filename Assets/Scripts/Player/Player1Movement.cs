@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Player1Movement : MonoBehaviour {
 	enum direction {up, down, left, right, upleft, upright, downleft, downright};
@@ -10,6 +11,7 @@ public class Player1Movement : MonoBehaviour {
 	public GameObject reticle;
 	private Transform reticleLocation;
 	bool isCasting = false;
+	List<Collider> psyObjs = new List<Collider>();
 
 	void Awake() {
 		//Setup references
@@ -106,6 +108,7 @@ public class Player1Movement : MonoBehaviour {
 
 	void PsynergyActivate() {
 		if (Input.GetButtonDown ("Fire2")) {
+			print ("psynergy activate");
 			isCasting = true;
 			anim.SetBool ("IsWalking", false);
 			reticleLocation.position = new Vector3(transform.position.x, 3f, transform.position.z);
@@ -115,7 +118,7 @@ public class Player1Movement : MonoBehaviour {
 	void PsynergyMove(float h, float v) {
 		float offsetX = 0;
 		float offsetZ = 0;
-		float moveSpeed = 0.03f;
+		float moveSpeed = 0.04f;
 
 		//determine movement
 		if (h == -1) {
@@ -134,10 +137,35 @@ public class Player1Movement : MonoBehaviour {
 	}
 
 	void PsynergyRelease() {
-		if (Input.GetButtonDown ("Fire2")) {
+		if (Input.GetButtonUp ("Fire2")) {
+			print ("psynergy release");
 			isCasting = false;
+
+			List<Collider> affectedObjs = createHitsphere(new Vector3(reticleLocation.position.x, 0f, reticleLocation.position.z), 2, 8);
+			if (affectedObjs.Count != 0) {
+				psyObjs = affectedObjs;
+				print (psyObjs[0]);
+				if(psyObjs[0].name != "monster")
+					psyObjs[0].gameObject.renderer.material.SetColor("_Color", Color.blue);
+			}
+
 			reticleLocation.position = new Vector3(0, -1f, 0);
 		}
+	}
+
+	List<Collider> createHitsphere(Vector3 hsVector, float radius, int layerID) {
+		Collider[] hitColliders = Physics.OverlapSphere(hsVector, radius);
+		
+		int i = 0;
+		List<Collider> affectedObjs = new List<Collider>();
+		while (i < hitColliders.Length) {
+			if(hitColliders[i].gameObject.layer == layerID) {
+				affectedObjs.Add(hitColliders[i]);
+			}
+			i++;
+		}
+		
+		return affectedObjs;
 	}
 
 	// Update is called once per frame
