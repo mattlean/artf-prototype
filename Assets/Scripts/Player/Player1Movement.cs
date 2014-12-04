@@ -12,6 +12,8 @@ public class Player1Movement : MonoBehaviour {
 	private Transform reticleLocation;
 	bool isCasting = false;
 	List<Collider> psyObjs = new List<Collider>();
+	public GameObject psyeffect;
+	private Transform psyeffectLocation;
 
 	void Awake() {
 		//Setup references
@@ -20,6 +22,10 @@ public class Player1Movement : MonoBehaviour {
 
 		Instantiate (reticle, new Vector3(transform.position.x, -1f, transform.position.y), Quaternion.Euler(new Vector3(90, 0, 0)));
 		reticleLocation = GameObject.Find ("P1Reticle(Clone)").GetComponent<Transform>();
+
+		Instantiate (psyeffect, new Vector3(0, -5f, 0), Quaternion.Euler(new Vector3(270, 0, 0)));
+		psyeffectLocation = GameObject.Find ("P1PsyEffect(Clone)").GetComponent<Transform>();
+
 	}
 
 	void Move(float h, float v) {
@@ -112,6 +118,7 @@ public class Player1Movement : MonoBehaviour {
 			isCasting = true;
 			anim.SetBool ("IsWalking", false);
 			reticleLocation.position = new Vector3(transform.position.x, 3f, transform.position.z);
+			psyeffectLocation.position = new Vector3(transform.position.x, 0.55f, transform.position.z);
 		}
 	}
 
@@ -145,11 +152,12 @@ public class Player1Movement : MonoBehaviour {
 			if (affectedObjs.Count != 0) {
 				psyObjs = affectedObjs;
 				print (psyObjs[0]);
-				if(psyObjs[0].name != "monster")
-					psyObjs[0].gameObject.renderer.material.SetColor("_Color", Color.blue);
+				//if(psyObjs[0].name != "monster")
+				psyObjs[0].gameObject.renderer.material.SetColor("_Color", Color.blue);
 			}
 
 			reticleLocation.position = new Vector3(0, -1f, 0);
+			psyeffectLocation.position = new Vector3(0, -5f, 0);
 		}
 	}
 
