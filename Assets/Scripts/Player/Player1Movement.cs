@@ -94,8 +94,16 @@ public class Player1Movement : MonoBehaviour {
 		transform.position = new Vector3 (transform.position.x + offsetX, transform.position.y, transform.position.z + offsetZ);
 	}
 
+	void Attack() {
+		if (Input.GetButtonDown ("Fire1")) {
+			anim.SetTrigger ("Attack");
+		}
+	}
+
 	// Update is called once per frame
 	void Update() {
 		Move ();
+
+		Attack ();
 	}
 }
