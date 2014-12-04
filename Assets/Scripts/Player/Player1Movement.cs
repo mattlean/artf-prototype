@@ -5,15 +5,21 @@ public class Player1Movement : MonoBehaviour {
 	enum direction {up, down, left, right, upleft, upright, downleft, downright};
 	direction playerDirection = direction.up;
 	Rigidbody playerRigidbody; //Reference to the player's rigidbody
+	Animator anim; //Reference to the animator's component
 
 	void Awake() {
 		//Setup references
 		playerRigidbody = GetComponent<Rigidbody> ();
+		anim = GetComponent<Animator> ();
 	}
 
 	void Move() {
 		float h = Input.GetAxisRaw ("Horizontal");
 		float v = Input.GetAxisRaw ("Vertical");
+
+		//control running animation
+		bool walking = h != 0f || v != 0f;
+		anim.SetBool ("IsWalking", walking);
 
 		//determine facing direction
 		if (h == -1) {
@@ -86,6 +92,8 @@ public class Player1Movement : MonoBehaviour {
 		}
 
 		transform.position = new Vector3 (transform.position.x + offsetX, transform.position.y, transform.position.z + offsetZ);
+
+		//transform.LookAt(Vector3.right);
 	}
 
 	// Update is called once per frame
