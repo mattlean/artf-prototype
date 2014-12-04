@@ -155,6 +155,7 @@ public class Player1Movement : MonoBehaviour {
 				psyObjs[0].rigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;
 				if(psyObjs[0].name == "SPIDER") {
 					psyObjs[0].GetComponentInChildren<Transform>().Find("Mesh").renderer.material.SetColor ("_Color", Color.blue);
+					psyObjs[0].GetComponentInChildren<Transform>().Find("Mesh").rigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;
 				} else {
 					psyObjs[0].gameObject.renderer.material.SetColor("_Color", Color.blue);
 				}

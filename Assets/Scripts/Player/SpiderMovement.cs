@@ -3,7 +3,7 @@ using System.Collections;
 
 public class SpiderMovement : MonoBehaviour {
 	enum direction {up, down, left, right, upleft, upright, downleft, downright};
-	direction playerDirection = direction.up;
+	direction playerDirection = direction.down;
 	Rigidbody playerRigidbody; //Reference to the player's rigidbody
 	
 	void Awake() {
