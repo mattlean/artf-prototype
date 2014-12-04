@@ -1,9 +1,9 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Player\Player1Movement.cs">
     <Files>
-      <File FileName="Assets\Scripts\Player\Player1Movement.cs" Line="83" Column="24" />
-      <File FileName="Assets\MeleeWeaponTrail\Example\Scripts\SwooshTest.cs" Line="7" Column="26" />
+      <File FileName="Assets\Scripts\Player\Player1Movement.cs" Line="10" Column="28" />
+      <File FileName="Assets\Scripts\Player\Player2Movement.cs" Line="23" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
