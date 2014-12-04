@@ -153,11 +153,12 @@ public class Player1Movement : MonoBehaviour {
 				psyObjs = affectedObjs;
 				print (psyObjs[0]);
 				//if(psyObjs[0].name != "monster")
+				psyObjs[0].rigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;
 				psyObjs[0].gameObject.renderer.material.SetColor("_Color", Color.blue);
 			}
 
 			reticleLocation.position = new Vector3(0, -1f, 0);
-			psyeffectLocation.position = new Vector3(0, -5f, 0);
+			//psyeffectLocation.position = new Vector3(0, -5f, 0);
 		}
 	}
 
