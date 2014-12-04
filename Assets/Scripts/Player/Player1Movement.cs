@@ -92,8 +92,6 @@ public class Player1Movement : MonoBehaviour {
 		}
 
 		transform.position = new Vector3 (transform.position.x + offsetX, transform.position.y, transform.position.z + offsetZ);
-
-		//transform.LookAt(Vector3.right);
 	}
 
 	// Update is called once per frame
